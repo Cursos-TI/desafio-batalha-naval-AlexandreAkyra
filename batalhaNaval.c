@@ -4,37 +4,170 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
+
 int main() {
     // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
-
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
     
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    // Declarando os arrays e matrizes
+    char linha[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+    int navio_vertical[3] = {3, 3 ,3};
+    int navio_horizontal[3] = {3, 3, 3};
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    int matriz_cone[3][5];
+    int matriz_cruz[3][5];
+    int matriz_octaedro[3][5];
+    
+    int tabuleiro[10][10] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
+
+    // Posicionando o navio horizontal C5 D5 E5
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[4][1 + i] = navio_horizontal[i];
+    }
+    
+    // Posicionando o navio vertical F7 F8 F9
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[0 + i][4] = navio_vertical[i];
+    }
+
+    // Posicinando o navio diagonal A1 B2 C3
+    for (int i = 0; i < 3; i++) {
+        tabuleiro[i][i] = 3;
+    }
+
+    // Posicionando o navio diagonal J10 I9 H8
+    for (int i = 0; i < 3; i++) {
+        int linha = i;
+        int coluna = 8 - i;
+        tabuleiro[linha][coluna] = 3;
+    }
+
+    // Definindo a matriz do ataque em cone
+    for (int linha = 0; linha < 3; linha++) {
+        for (int coluna = 0; coluna < 5; coluna++) {
+            if (linha == 0 && coluna == 2) {
+                matriz_cone[linha][coluna] = 1;
+            } else if (linha == 1 && (coluna >= 1 && coluna <=3)) {
+                matriz_cone[linha][coluna] = 1;
+            } else if (linha == 2) {
+                matriz_cone[linha][coluna] = 1;
+            } else {
+                matriz_cone[linha][coluna] = 0;
+            }
+        }
+    }
+
+    // Definindo a matriz do ataque em cruz
+    for (int linha = 0; linha < 3; linha++) {
+        for (int coluna = 0; coluna < 5; coluna++) {
+            if (linha == 0 && coluna == 2) {
+                matriz_cruz[linha][coluna] = 1;
+            } else if (linha == 1) {
+                matriz_cruz[linha][coluna] = 1;
+            } else if (linha == 2 && coluna == 2) {
+                matriz_cruz[linha][coluna] = 1;
+            } else {
+                matriz_cruz[linha][coluna] = 0;
+            }
+        }
+    }
+
+    // Definindo a matriz do ataque em octaedro
+    for (int linha = 0; linha < 3; linha++) {
+        for (int coluna = 0; coluna < 5; coluna++) {
+            if (linha == 0 && coluna == 2) {
+                matriz_octaedro[linha][coluna] = 1;
+            } else if (linha == 1 && (coluna >= 1 && coluna <=3)) {
+                matriz_octaedro[linha][coluna] = 1;
+            } else if (linha == 2 && coluna == 2) {
+                matriz_octaedro[linha][coluna] = 1;
+            } else {
+                matriz_octaedro[linha][coluna] = 0;
+            }
+        }
+    }
+
+    // Aplicando o ataque em cone
+    int linha_ataque = 0;
+    int coluna_ataque = 0;
+    for(int linha = 0; linha < 10; linha++) {
+        if (linha >= 7 && linha <= 9) {
+            for(int coluna = 0; coluna < 10; coluna++) {             
+                if (linha_ataque < 3 && coluna_ataque < 5 && coluna >= 5 && coluna <= 9) {                    
+                    tabuleiro[linha][coluna] = matriz_cone[linha_ataque][coluna_ataque];
+                    coluna_ataque++;
+                    if (coluna_ataque == 5) {
+                        coluna_ataque = 0;
+                    }
+                }                        
+            }
+            linha_ataque++;      
+        }  
+    }
+
+    // Aplicando o ataque em cruz
+    linha_ataque = 0;
+    coluna_ataque = 0;
+    for(int linha = 0; linha < 10; linha++) {
+        if (linha >= 6 && linha <= 8) {
+            for(int coluna = 0; coluna < 10; coluna++) {             
+                if (linha_ataque < 3 && coluna_ataque < 5 && coluna < 5) {                    
+                    tabuleiro[linha][coluna] = matriz_cruz[linha_ataque][coluna_ataque];
+                    coluna_ataque++;
+                    if (coluna_ataque == 5) {
+                        coluna_ataque = 0;
+                    }
+                }                        
+            }
+            linha_ataque++;      
+        }  
+    }
+
+    // Aplicando o ataque em oc
+    linha_ataque = 0;
+    coluna_ataque = 0;
+    for(int linha = 0; linha < 10; linha++) {
+        if (linha >= 3 && linha <= 5) {
+            for(int coluna = 0; coluna < 10; coluna++) {             
+                if (linha_ataque < 3 && coluna_ataque < 5 && coluna >= 5 && coluna <= 9) {                    
+                    tabuleiro[linha][coluna] = matriz_octaedro[linha_ataque][coluna_ataque];
+                    coluna_ataque++;
+                    if (coluna_ataque == 5) {
+                        coluna_ataque = 0;
+                    }
+                }                        
+            }
+            linha_ataque++;      
+        }  
+    }
+
+    //Imprimindo o tabuleiro 
+    printf("TABULEIRO BATALHA NAVAL\n");
+    
+    printf("  ");
+    for(int l = 0; l < 10; l++) {
+        printf(" %c", linha[l]);
+    }
+
+    printf("\n");
+
+    for(int coluna = 0; coluna < 10; coluna++) {
+        printf("%2d ", coluna+1);
+        for(int linha = 0; linha < 10; linha++) {
+            printf("%d ", tabuleiro[coluna][linha]);
+        }
+        printf("\n");
+    }
 
     return 0;
 }
